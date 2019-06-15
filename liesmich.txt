@@ -1,0 +1,68 @@
+﻿Admin Login als Kunde (Encrypted Master Password) 2.8.0 für Zen Cart 1.5.6 deutsch
+
+Diese Erweiterung bietet die Möglichkeit in jeden beliebigen Kundenaccount einzuloggen.
+Im Gegensatz zu früheren Versionen wird dazu das Passwort des Administrators verwendet, das verschlüsselt in der Datenbank gespeichert wird.
+Sinnvoll dann, wenn ein Kunde Probleme meldet und man genau nachvollziehen will, was der Kunde sieht.
+Ebenso sinnvoll für Shops, die telefonische Bestellungen annehmen und so gleich die Bestellung für einen Kunden durchführen können.
+
+Version 2.8.0 erfordert keine Änderung bestehender Dateien, einfach hochladen und fertig.
+
+Dieses Modul ist ausschließlich für Zen Cart 1.5.6 deutsch geeignet und kann in anderen Zen Cart Versionen NICHT verwendet werden!
+Ebensowenig können ältere Versionen dieses Moduls in 1.5.6 verwendet werden!
+
+
+Falls Sie eine ältere Version dieses Modul bereits im Einsatz haben, entfernen Sie es vorher komplett!
+
+Deinstallation von Version 2.7.2 und älter:
+
+1.
+Die uninstall.sql aus dem Ordner UNINSTALL mit einem Texteditor öffen und den Inhalt kopieren.
+Zen Cart Administration öffnen und unter Tools > SQL Patches installieren den Inhalt ins Feld hineinkopieren und absenden.
+Dadurch werden die alten Konfigurationseinstellungen aus der Datenbank entfernt.
+
+2.
+Folgende Datei aus dem Shopverzeichnis herunterladen:
+DEINADMIN/customers.php
+Änderungen des Modul rückgängig machen und folgenden Abschnitt entfernen:
+
+//-bof-a-EMP login link  *** 1 of 1 ***
+$emp_sql = 'SELECT admin_profile, admin_pass from ' . TABLE_ADMIN . ' WHERE admin_id = :adminId: AND admin_profile IN (' . EMP_LOGIN_ADMIN_PROFILE_ID . ')';
+$emp_sql = $db->bindVars($emp_sql, ':adminId:', $_SESSION['admin_id'], 'integer');
+$emp_result = $db->Execute($emp_sql);
+if (!$emp_result->EOF && ( $_SESSION['admin_id'] == EMP_LOGIN_ADMIN_ID || in_array ($emp_result->fields['admin_profile'], explode (',', EMP_LOGIN_ADMIN_PROFILE_ID)) )) {
+$contents[] = array('align' => 'center', 'text' => '<div align="center"><form target="_blank" name="login" action="' . zen_catalog_href_link(FILENAME_LOGIN, '', 'SSL') . '" method="post">' . zen_draw_hidden_field('email_address', $cInfo->customers_email_address) . zen_image_submit('button_placeorder.gif', EMP_BUTTON_PLACEORDER_ALT) . '</form></div>');       
+        }
+//-eof-a-EMP login link *** 1 of 1 ***
+
+
+
+Neuinstallation:
+
+1.
+Neue Dateien des Moduls einspielen:
+Im Ordner NEUE DATEIEN dieses Downloads den Ordner DEINADMIN auf den Namen Ihres admin Verzeichnisses umbenennen.
+Dann die Ordner/Dateien in der vorgegebenen Struktur ins Zen Cart Verzeichnis hochladen.
+Dadurch werden keine bestehenden Dateien überschrieben
+
+2.
+In der Zen Cart Administration ist nun unter Konfiguration > Mein Shop die Möglichkeit vorhanden, das Admin Login als Kunde auf eine bestimmte Admingruppe oder einen bestimmten Admin einzuschränken. 
+Diese Einstellungen müssen in der Regel nicht geändert werden und können auf 1 gelassen werden.
+Um die Einschränlungen nicht zu verwenden, die jeweiligen Optionen auf 0 stellen.
+
+3.
+Unter Kunden > Kunden ist nun beim Markieren eine Kunden der neue Button Login als Kunde vorhanden. 
+Mit diesem öffnet sich die Loginseite im Frontend des Shops.
+Emailadresse des Kunden ist bereits ausgefüllt. 
+Als Passwort das Passwort des Zen Cart Administrators eingeben.
+
+
+
+Deinstallation von Version 2.8.0
+
+1.
+Alle von diesem Modul neu angelegten Dateien vom Server löschen
+
+2.
+Die uninstall.sql aus dem Ordner UNINSTALL mit einem Texteditor öffen und den Inhalt kopieren.
+Zen Cart Administration öffnen und unter Tools > SQL Patches installieren den Inhalt ins Feld hineinkopieren und absenden.
+Dadurch werden die Konfigurationseinstellungen aus der Datenbank entfernt.
